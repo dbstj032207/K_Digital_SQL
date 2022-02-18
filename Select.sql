@@ -128,3 +128,172 @@ WHERE EMPNO = 7369;
 SELECT empno 사번, ename 이름, hiredate 입사일
 FROM EMP
 WHERE DEPTNO = 30;
+
+-- 부서번호 40번 사번, 이름, 입사일 select
+-- 없는 결과를 찾는건 에러가 아님
+SELECT empno 사번, ename 이름, hiredate 입사일
+FROM EMP
+WHERE DEPTNO = 40;
+
+-- 대소문자 주의
+SELECT empno 사번, ename 이름, hiredate 입사일
+FROM EMP
+WHERE JOB = 'SALESMAN';
+
+-- 날짜도 ''로 묶어서 사용
+SELECT empno 사번, ename 이름, hiredate 입사일
+FROM EMP
+WHERE hiredate = '81/11/17';
+
+-- 비교연산자
+SELECT empno 사번, ename 이름, sal 월급
+FROM EMP
+WHERE sal <= 1000;
+
+SELECT empno 사번, ename 이름, sal 월급
+FROM EMP
+WHERE sal <= 1250;
+
+SELECT empno 사번, ename 이름, sal 월급
+FROM EMP
+WHERE sal < 1250;
+
+SELECT empno 사번, ename 이름, hiredate 입사날짜
+FROM EMP
+WHERE hiredate > '81/02/22';
+
+-- BETWEEN AND
+SELECT empno 사번, ename 이름, sal 월급
+FROM EMP
+WHERE sal BETWEEN 1000 AND 2000;
+
+-- 최대 최소를 바꾸면 결과 안나옴
+SELECT empno 사번, ename 이름, sal 월급
+FROM EMP
+WHERE sal BETWEEN 2000 AND 1000;
+
+-- 날짜도 between 사용가능
+SELECT empno 사번, ename 이름, hiredate 입사날짜
+FROM EMP
+WHERE hiredate BETWEEN '81/02/20' AND '81/12/03';
+
+-- IN
+SELECT empno 사번, ename 이름, job 직업
+FROM EMP
+WHERE EMPNO IN (7839, 7844, 7876);
+
+SELECT empno 사번, ename 이름, sal 월급
+FROM EMP
+WHERE ename IN ('KING', 'SMITH');
+
+-- IS NULL
+SELECT empno 사번, ename 이름, comm 커미션
+FROM EMP
+WHERE comm IS NULL;
+
+SELECT empno 사번, ename 이름, comm 커미션
+FROM EMP
+WHERE comm IS NOT NULL;
+
+-- LIKE
+-- A%, %A, %A%
+SELECT empno 사번, ename 이름, job 직업
+FROM EMP
+WHERE ename LIKE 'A%';
+
+SELECT empno 사번, ename 이름, job 직업
+FROM EMP
+WHERE ename LIKE '%A%';
+
+SELECT empno 사번, ename 이름, job 직업
+FROM EMP
+WHERE ename LIKE '%T%';
+
+SELECT empno 사번, ename 이름, job 직업
+FROM EMP
+WHERE ename LIKE '_L%'; -- 첫번째 문자는 뭐가 오든 상관없고, 두번째 문자가 대문자 L인 문자열
+
+SELECT empno 사번, ename 이름, job 직업
+FROM EMP
+WHERE ename LIKE '___D';
+
+SELECT empno 사번, ename 이름, job 직업
+FROM EMP
+WHERE ename LIKE '%S';
+
+-- 논리 연산자
+SELECT empno 사번, ename 이름, job 직업, sal 월급
+FROM EMP
+WHERE job = 'SALESMAN' AND sal >= 1500;
+
+SELECT empno 사번, ename 이름, job 직업, sal 월급
+FROM EMP
+WHERE job = 'SALESMAN' OR sal >= 1500;
+
+SELECT empno 사번, ename 이름, comm 커미션
+FROM EMP
+WHERE comm IS NOT NULL;
+
+-- AND OR의 우선순위
+SELECT ename 이름, job 직업, sal 월, comm 커미션
+FROM EMP
+WHERE job = 'CLERK' OR job = 'ANALYST'
+AND comm IS NULL
+AND sal BETWEEN 1000 AND 3000;
+
+-- 이부분이 먼저 실행됨
+SELECT ename 이름, job 직업, sal 월, comm 커미션
+FROM EMP
+WHERE comm IS NULL
+AND sal BETWEEN 1000 AND 3000;
+
+SELECT ename 이름, job 직업, sal 월, comm 커미션
+FROM EMP
+WHERE (job IN 'CLERK' OR job = 'ANALYST')
+AND comm IS NULL
+AND sal BETWEEN 1000 AND 3000;
+
+SELECT ename 이름, job 직업, sal 월, comm 커미션
+FROM EMP
+WHERE job IN ('CLERK', 'ANALYST')
+AND comm IS NULL
+AND sal BETWEEN 1000 AND 3000;
+
+SELECT ename 이름, job 직업, sal 월급
+FROM EMP
+WHERE NOT sal > 1000;
+
+SELECT ename 이름, job 직업, sal 월급, deptno 부서번호
+FROM EMP
+WHERE deptno NOT IN (10, 20);
+
+SELECT ename 이름, job 직업
+FROM EMP
+WHERE ename NOT LIKE 'J%';
+
+--정렬 기본은 오름차순
+SELECT empno 사번, ename 이름, hiredate 입사날짜
+FROM EMP
+ORDER BY hiredate;
+--ORDER BY 3;
+
+-- 내림차순으로 정렬SELECT empno 사번, ename 이름, hiredate 입사날짜
+SELECT empno 사번, ename 이름, hiredate 입사날짜
+FROM EMP
+ORDER BY hiredate DESC;
+
+--별칭을 이용해서도 정렬 가능
+SELECT empno 사번, ename 이름, SAL * 12 ANNUAL
+FROM EMP
+ORDER BY ANNUAL;
+--ORDER BY 3;
+
+-- 정렬에 null값이 포함된 경우 null을 가장 큰값으로 반환
+SELECT empno 사번, ename 이름, SAL * 12 ANNUAL, comm 커미션
+FROM EMP
+ORDER BY 4;
+
+-- 앞의 조건에 의해 한번 정렬 후, 같은 값이 있으면 다음 조건에 의해 정렬됨
+SELECT empno 사번, ename 이름, SAL 월급
+FROM EMP
+ORDER BY SAL DESC, EMPNO;
