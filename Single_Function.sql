@@ -254,3 +254,85 @@ FROM EMP;
 
 -- 묵시적 타입 변환
 SELECT * FROM EMP WHERE DEPTNO = '10';
+
+SELECT ename, sal
+from emp
+where sal = '17000';
+
+-- TO_CHAR 함수
+SELECT hiredate, TO_CHAR(hiredate, 'YYYY')
+FROM EMP;
+
+SELECT TO_CHAR(SYSDATE, 'YYYY/MM/DD,(AM) DY HH24:MI:SS')
+FROM dual;
+
+SELECT hiredate, TO_CHAR(hiredate, 'MM')
+FROM EMP;
+
+SELECT ename 이름, hiredate 입사일, TO_CHAR(hiredate, 'YYYY') 입사년
+FROM EMP
+WHERE TO_CHAR(hiredate, 'YYYY') = '1981';
+
+-- 한글 표현식 사용 가능
+-- ' " " '주의
+SELECT TO_CHAR(SYSDATE, ' YYYY"년" MM"월" D"일" ') 날짜
+FROM dual;
+
+-- 숫자 형식
+-- '.': 소수점 표시 , 
+-- ',': 특정 위치에 ',' 표시, 
+-- 'L': 지역 통화
+SELECT ename 이름, sal 월급, 
+TO_CHAR(sal, '$999,999') 달러, 
+TO_CHAR(sal, 'L999,999') 원화
+from emp;
+
+--TO_NUMBER 함수
+SELECT TO_NUMBER('123') + 100
+FROM dual;
+
+-- TO_DATE 함수
+SELECT TO_DATE( '20170802', 'YYYYMMDD' )
+FROM dual;
+SELECT SYSDATE, SYSDATE - TO_DATE( '20220101', 'YYYYMMDD' )
+FROM dual;
+
+-- Oracle 기본 날짜 형식이 RR/MM/DD 이기때문에 17/08/02로 출력 됨
+-- Oracle의 날짜 형식을 변경할 수 있음
+ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY/MM/DD HH24:MI:SS';
+
+SELECT TO_DATE( '20170802181030', 'YYYYMMDDHH24MISS' )
+FROM dual;
+
+-- DECODE 함수
+SELECT ename 이름, sal 월급, 
+       DECODE( sal, 800, sal * 0.1,
+                     1250, sal * 0.2,
+                     1600, sal * 0.3,
+                     sal * 0.4) 보너스
+FROM EMP
+ORDER BY 2 DESC;
+
+-- DECODE를 이용한 급여 인상
+SELECT empno 사번, ename 이름, job 직업, sal 급여,
+       DECODE(job,   'ANALYST',     sal * 1.1,
+                     'CLERK',       sal * 1.2,
+                     'MANAGER',     sal * 1.3,
+                     'PRESIDENT',   sal * 1.4,
+                     'SALESMAN',    sal * 1.5,
+                     sal) "인상된 급여"
+FROM EMP
+ORDER BY 5 DESC;
+
+-- CASE 함수를 이용한 급여 인상
+SELECT empno 사번, ename 이름, job 직업, sal 급여,
+       CASE job WHEN    'ANALYST'   THEN    sal * 1.1
+                WHEN    'CLERK'     THEN    sal * 1.2
+                WHEN    'MANAGER'   THEN    sal * 1.3
+                WHEN    'PRESIDENT' THEN    sal * 1.4
+                WHEN    'SALESMAN'  THEN    sal * 1.5
+                ELSE    sal 
+       END "인상된 급여"
+FROM EMP
+ORDER BY 3 DESC;
+
