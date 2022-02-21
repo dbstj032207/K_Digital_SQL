@@ -336,3 +336,39 @@ SELECT empno 사번, ename 이름, job 직업, sal 급여,
 FROM EMP
 ORDER BY 3 DESC;
 
+
+SELECT empno 사번, ename 이름, sal 급여,
+       CASE     WHEN    sal > 1000  THEN    sal * 0.1
+                WHEN    sal > 2000  THEN    sal * 0.2
+                WHEN    sal > 3000  THEN    sal * 0.3
+                ELSE    sal * 0.4
+       END 보너스
+FROM EMP
+ORDER BY 3 DESC;
+
+-- BETWEEN을 사용해서 정확한 범위 표현
+SELECT empno 사번, ename 이름, sal 급여,
+       CASE     WHEN    sal  BETWEEN 0 AND 999  	THEN    sal * 0.1	
+                WHEN    sal  BETWEEN 1000 AND 1999  THEN    sal * 0.2
+                WHEN    sal  BETWEEN 2000 AND 2999  THEN    sal * 0.3
+                ELSE    sal * 0.4
+       END 보너스
+FROM EMP
+ORDER BY 3 DESC;
+
+SELECT ename 이름, sal 급여,
+       CASE     WHEN    sal  BETWEEN 4000 AND 5000  THEN    '상'
+                WHEN    sal  BETWEEN 3000 AND 3999  THEN    '중'
+                ELSE    '하'
+       END 등급
+FROM EMP
+ORDER BY 2 DESC;
+
+SELECT ename 이름, sal 급여,
+       CASE     WHEN    sal  IN (1250, 1300, 1500, 1600)         THEN    '중'
+                WHEN    sal  IN (2450, 2850, 2975, 3000, 5000)   THEN    '상'
+                ELSE    '하'
+       END 등급
+FROM EMP
+ORDER BY 2 DESC;
+
