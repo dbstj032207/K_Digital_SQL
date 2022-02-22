@@ -87,3 +87,6 @@ JOIN DEPT
 USING (deptno)
 WHERE loc = 'DALLAS'
 AND sal >= 1500;
+
+
+--
