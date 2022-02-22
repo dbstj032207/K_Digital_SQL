@@ -126,5 +126,114 @@ FROM    EMP e,  -- 사원에 대한 정보
 WHERE e.mgr = m.empno
 AND e.ename = 'SMITH';
 
+-- 2단계 Self 조인 
+-- 관리자의 관리자까지 탐색
+SELECT  *
+FROM    EMP e,  -- 사원에 대한 정보 
+        EMP m,  -- 관리자에 대한 정보
+        EMP mm  -- 관리자의 관리자에 대한정보
+WHERE   e.mgr = m.empno
+AND     m.mgr = mm.empno;
 
+-- 사원 번호, 사원 이름, 관리자 번호, 관리자 이름, 관리자 부서번호 탐색
+-- + SMITH의 관리자에 대한 내용
+-- + 관리자의 관리자의 번호, 관리자의 관리자의 이름
+SELECT  e.empno "사원 번호", e.ename "사원 이름", e.mgr "관리자(M) 번호",
+        m.ename "관리자(M) 이름", m.deptno "관리자(M) 부서번호", m.mgr "M의 관리자 번호",
+        mm.ename "M의 관리자 이름"
+FROM    EMP e,  -- 사원에 대한 정보 
+        EMP m,  -- 관리자에 대한 정보
+        EMP mm  -- 관리자의 관리자에 대한정보
+WHERE   e.mgr = m.empno
+AND     m.mgr = mm.empno
+AND     e.ename = 'SMITH';
+
+-- outer Join
+SELECT *
+FROM    EMP e,  -- 사원에 대한 정보 
+        EMP m,  -- 관리자에 대한 정보
+        EMP mm  -- 관리자의 관리자에 대한정보
+WHERE   e.mgr = m.empno(+)
+AND     m.mgr = mm.empno(+);
+
+
+
+-- ANSI JOIN
+
+-- Cross Join
+SELECT empno, ename, dname, loc
+FROM DEPT
+CROSS JOIN EMP;
+
+-- Natural Join
+SELECT deptno
+FROM EMP
+NATURAL JOIN DEPT;
+
+-- USING
+SELECT *
+FROM EMP
+JOIN DEPT
+USING (deptno);
+
+SELECT empno, deptno
+FROM EMP
+JOIN DEPT
+USING (deptno);
+
+SELECT empno, e.deptno
+FROM EMP e
+JOIN DEPT d
+USING (deptno);
+
+-- JOIN ON 
+SELECT *
+FROM EMP e
+JOIN DEPT d
+ON e.deptno = d.deptno;
+
+-- 검색 조건을 ON절에 AND를 사용하여 적용해도 되고
+-- WHERE를 사용하여 지정하여도된다
+SELECT *
+FROM EMP e
+JOIN DEPT d
+ON e.deptno = d.deptno
+-- AND ename = 'SMITH';
+WHERE ename = 'SMITH';		-- 하지만, 검색조건은 WHERE을 사용하는 것을 권장한다.
+
+-- 1. USING을 이용 SMITH의 이름과 부서번호, 부서이름 SELECT
+SELECT ename 이름, deptno 부서번호, dname 부서이름
+FROM EMP
+JOIN DEPT
+USING (deptno)
+WHERE ename = 'SMITH';
+
+-- 2. JOIN ON을 이용, 별칭 사용
+SELECT e.ename 이름, e.deptno 부서번호, d.dname 부서이름
+FROM EMP e
+JOIN DEPT d
+ON e.deptno = d.deptno
+WHERE e.ename = 'SMITH';
+
+-- 3개 테이블 조인, ON절 사용
+SELECT empno 사번, ename 이름, e.deptno 부서번호,   -- 부서번호의 테이블명 지정
+       dname 부서명, sal 월급, grade 등급 
+FROM EMP e
+JOIN DEPT d
+ON e.deptno = d.deptno
+JOIN SALGRADE 
+ON sal BETWEEN losal AND hisal
+WHERE ename = 'SMITH'
+ORDER BY 5;
+
+-- 3개 테이블 조인 , USING절 사용
+SELECT empno 사번, ename 이름, deptno 부서번호,     -- 부서번호의 테이블명 지정x
+       dname 부서명, sal 월급, grade 등급 
+FROM EMP e
+JOIN DEPT d
+USING (deptno)
+JOIN SALGRADE 
+ON sal BETWEEN losal AND hisal
+WHERE ename = 'SMITH'
+ORDER BY 5;
 
