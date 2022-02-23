@@ -98,3 +98,60 @@ FROM DEPT
 WHERE deptno IN (   SELECT deptno
                     FROM EMP
                     WHERE sal >= 2850);
+                    
+-- ALL 연산자
+-- MANAGER 업무를 보는 사원의 월급
+-- 그 중 제일 작은 값은 2450
+SELECT SAL
+FROM EMP
+WHERE JOB = 'MANAGER';
+
+-- 가장 적은 월급인 2450 보다 적은 월급을 받는 사원 검색
+SELECT empno, ename, sal
+FROM EMP
+WHERE sal < 2450;
+
+-- 이 둘을 서브쿼리를 이용하여 합칠때 < ALL 연산자 사용
+SELECT empno, ename, sal
+FROM EMP
+WHERE sal < ALL (   SELECT sal
+                    FROM EMP
+                    WHERE JOB = 'MANAGER');
+
+-- 반대로                    
+SELECT empno, ename, sal
+FROM EMP
+WHERE sal > ALL (   SELECT sal
+                    FROM EMP
+                    WHERE JOB = 'MANAGER');      
+                    
+
+-- ANY 연산자
+-- MANAGER 업무를 보는 사원의 월급
+-- 그 중 제일 작은 값은 2450                    
+SELECT sal
+FROM EMP
+WHERE job = 'MANAGER';
+
+-- 가장 적은 월급인 2450 보다 큰 월급을 받는 사원 검색
+SELECT empno, ename, sal
+FROM EMP
+WHERE sal > 2450;
+
+-- 이 둘을 서브쿼리를 이용하여 합칠때 > ANY 연산자 사용
+SELECT empno, ename, sal
+FROM EMP
+WHERE sal > ANY (   SELECT sal
+                    FROM EMP
+                    WHERE JOB = 'MANAGER');     
+
+-- 반대로                    
+SELECT empno, ename, sal
+FROM EMP
+WHERE sal < ANY (   SELECT sal
+                    FROM EMP
+                    WHERE JOB = 'MANAGER');     
+                    
+                    
+
+
