@@ -152,6 +152,59 @@ WHERE sal < ANY (   SELECT sal
                     FROM EMP
                     WHERE JOB = 'MANAGER');     
                     
-                    
+-- EXISTS 연산자
+-- 서브쿼리에 값이 존재하는 경우
+SELECT *
+FROM EMP
+WHERE EXISTS (  SELECT empno
+                FROM EMP
+                WHERE comm IS NOT NULL );
+
+-- 서브쿼리에 값이 존재하지 않는 경우                 
+SELECT *
+FROM EMP
+WHERE EXISTS (  SELECT empno
+                FROM EMP
+                WHERE sal > 10000 );   
+                
+-- 다중컬럼 서브쿼리
+-- Pairwise
+SELECT deptno, empno, ename, sal
+FROM EMP
+WHERE (deptno, sal) IN (    SELECT deptno, MAX(sal)
+                            FROM EMP
+                            GROUP BY deptno);                        
+                            
+-- Unpairwise   
+SELECT deptno, empno, ename, sal
+FROM EMP
+WHERE deptno IN (   SELECT deptno
+                    FROM EMP
+                    GROUP BY deptno)
+AND sal IN (    SELECT MAX(sal)
+                FROM EMP
+                GROUP BY deptno);         
+                
+-- 인라인 뷰
+-- EMP와 DEPT테이블에서 부서별 sal 총합과 평균을 출력
+SELECT e.deptno, total_sum, total_avg, cnt
+FROM (  SELECT deptno, SUM(sal) total_sum, AVG(sal) total_avg, COUNT(*) cnt
+        FROM EMP
+        GROUP BY deptno ) e, DEPT d
+WHERE e.deptno = d.deptno;        
+
+-- 상관 서브쿼리
+
+-- 사원이름과 소속 부서 정보
+SELECT e.empno, e.ename, e.sal, dname 부서명
+FROM EMP e, DEPT d
+WHERE e.deptno = d.deptno
+ORDER BY 1;
+
+SELECT e.empno, e.ename, e.sal, (   SELECT dname
+                                    FROM DEPT d
+                                    WHERE d.deptno = e.deptno) 부서명
+FROM EMP e
+ORDER BY 1;
 
 
