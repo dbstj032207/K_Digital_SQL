@@ -391,5 +391,35 @@ WHEN MATCHED THEN
     UPDATE SET total.제품번호 = p02.제품번호
 WHEN NOT MATCHED THEN
     INSERT VALUES (p02.판매번호, p02.제품번호, p02.수량, p02.금액);
+    
+    
+-- 트랜젝션
 
+-- DEPT 50, aa, aa INSERT           - tx 시작
+INSERT INTO DEPT
+VALUES (50, 'aa', 'aa');
+
+-- DEPT 40번 주소 aa로 update
+UPDATE DEPT
+SET loc = 'aa'
+WHERE deptno = 40;
+
+-- 확인
+SELECT * FROM DEPT;
+
+-- ROLLBACK                     - tx 종료
+ROLLBACK;
+
+-- 확인
+SELECT * FROM DEPT;
+
+
+---- lock
+UPDATE DEPT
+SET loc = '부산'
+WHERE deptno = 40;
+-- ROLLBACK이나 COMMIT 하기 전에는
+-- 다른 사용자가 접근 불가
+
+ROLLBACK;
 
